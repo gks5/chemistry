@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সম্পূর্ণ রাসায়নিক মোল টেবিল - ১১৮টি মৌল</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Verdana', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .group-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .group-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 50px;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .group-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .group-btn.active {
+            background: #e74c3c;
+        }
+        
+        .search-box {
+            padding: 12px 20px;
+            border: 2px solid #3498db;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 1rem;
+        }
+        
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .element-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .element-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .element-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+        
+        .element-symbol {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .element-name {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+        
+        .element-mass {
+            font-size: 1rem;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .element-group {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            background: #dfe6e9;
+            color: #636e72;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: white;
+            background: #2c3e50;
+            border-radius: 10px;
+        }
+        
+        /* মোডাল স্টাইল */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .modal-symbol {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .modal-name {
+            font-size: 1.8rem;
+            color: #34495e;
+        }
+        
+        .modal-number {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        
+        .modal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .detail-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-top: 5px;
+        }
+        
+        .electron-config {
+            grid-column: 1 / -1;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .elements-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .modal-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .group-filter {
+                width: 100%;
+            }
+            
+            .element-card {
+                padding: 10px;
+            }
+            
+            .element-symbol {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* রাসায়নিক গ্রুপের জন্য রং */
+        .alkali { border-left: 5px solid #e74c3c; }
+        .alkaline { border-left: 5px solid #f39c12; }
+        .transition { border-left: 5px solid #3498db; }
+        .basic-metal { border-left: 5px solid #2ecc71; }
+        .semimetal { border-left: 5px solid #9b59b6; }
+        .nonmetal { border-left: 5px solid #1abc9c; }
+        .halogen { border-left: 5px solid #d35400; }
+        .noble-gas { border-left: 5px solid #8e44ad; }
+        .lanthanide { border-left: 5px solid #16a085; }
+        .actinide { border-left: 5px solid #27ae60; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>সম্পূর্ণ রাসায়নিক মোল টেবিল - ১১৮টি মৌল</h1>
+            <h5>
+               Golam kibria salman (BSc Honours ,Chemistry) 
+            </h5>         
+            <p class="description">পর্যায় সারণীর সমস্ত ১১৮টি মৌলের পারমাণবিক ভর (মোল) গ্রুপ অনুযায়ী সাজানো</p>
+        </header>
+        
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="মৌল খুঁজুন (নাম, প্রতীক, বা সংখ্যা দ্বারা)...">
+            
+            <div class="group-filter">
+                <button class="group-btn active" data-group="all">সব</button>
+                <button class="group-btn" data-group="alkali">ক্ষার ধাতু</button>
+                <button class="group-btn" data-group="alkaline">ক্ষারকীয় মৃত্তিকা ধাতু</button>
+                <button class="group-btn" data-group="transition">সংক্রমণ ধাতু</button>
+                <button class="group-btn" data-group="basic-metal">মৌলিক ধাতু</button>
+                <button class="group-btn" data-group="semimetal">ধাতুকল্প</button>
+                <button class="group-btn" data-group="nonmetal">অধাতু</button>
+                <button class="group-btn" data-group="halogen">হ্যালোজেন</button>
+                <button class="group-btn" data-group="noble-gas">নোবেল গ্যাস</button>
+                <button class="group-btn" data-group="lanthanide">ল্যান্থানাইড</button>
+                <button class="group-btn" data-group="actinide">অ্যাক্টিনাইড</button>
+            </div>
+        </div>
+        
+        <div class="elements-grid">
+            <!-- এলিমেন্ট কার্ডগুলি JavaScript দ্বারা যোগ করা হবে -->
+        </div>
+        
+        <footer>
+             <p>
+       Golam kibria salman (BSc Honours ,Chemistry) | Phon Number: 01644557266
+     </p>
+            <p>রসায়ন শিক্ষা - পর্যায় সারণীর সম্পূর্ণ মোল তথ্য</p>
+        </footer>
+    </div>
+
+    <!-- মোডাল পপআপ -->
+    <div class="modal" id="elementModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <div class="modal-header">
+                <div class="modal-symbol" id="modalSymbol"></div>
+                <div class="modal-name" id="modalName"></div>
+                <div class="modal-number" id="modalNumber"></div>
+            </div>
+            <div class="modal-details">
+                <div class="detail-item">
+                    <div class="detail-label">পারমাণবিক সংখ্যা</div>
+                    <div class="detail-value" id="modalAtomicNumber"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">পারমাণবিক ভর</div>
+                    <div class="detail-value" id="modalAtomicMass"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">ভ্যালেন্সি ইলেকট্রন</div>
+                    <div class="detail-value" id="modalValence"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">ইলেকট্রন বিন্যাস</div>
+                    <div class="detail-value" id="modalElectronConfig"></div>
+                </div>
+                <div class="electron-config">
+                    <div class="detail-label">ইলেকট্রন বিন্যাস (বিস্তারিত)</div>
+                    <div class="detail-value" id="modalFullElectronConfig"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // পর্যায় সারণীর সমস্ত ১১৮টি মৌলের ডেটা
+        const elements = [
+            { number: 1, symbol: "H", name: "হাইড্রোজেন", mass: 1.008, group: "nonmetal", 
+              valence: 1, electronConfig: "1s¹", fullElectronConfig: "1s¹" },
+            { number: 2, symbol: "He", name: "হিলিয়াম", mass: 4.0026, group: "noble-gas", 
+              valence: 2, electronConfig: "1s²", fullElectronConfig: "1s²" },
+            { number: 3, symbol: "Li", name: "লিথিয়াম", mass: 6.94, group: "alkali", 
+              valence: 1, electronConfig: "2s¹", fullElectronConfig: "1s² 2s¹" },
+            { number: 4, symbol: "Be", name: "বেরিলিয়াম", mass: 9.0122, group: "alkaline", 
+              valence: 2, electronConfig: "2s²", fullElectronConfig: "1s² 2s²" },
+            { number: 5, symbol: "B", name: "বোরন", mass: 10.81, group: "semimetal", 
+              valence: 3, electronConfig: "2p¹", fullElectronConfig: "1s² 2s² 2p¹" },
+            { number: 6, symbol: "C", name: "কার্বন", mass: 12.011, group: "nonmetal", 
+              valence: 4, electronConfig: "2p²", fullElectronConfig: "1s² 2s² 2p²" },
+            { number: 7, symbol: "N", name: "নাইট্রোজেন", mass: 14.007, group: "nonmetal", 
+              valence: 5, electronConfig: "2p³", fullElectronConfig: "1s² 2s² 2p³" },
+            { number: 8, symbol: "O", name: "অক্সিজেন", mass: 15.999, group: "nonmetal", 
+              valence: 6, electronConfig: "2p⁴", fullElectronConfig: "1s² 2s² 2p⁴" },
+            { number: 9, symbol: "F", name: "ফ্লুরিন", mass: 18.998, group: "halogen", 
+              valence: 7, electronConfig: "2p⁵", fullElectronConfig: "1s² 2s² 2p⁵" },
+            { number: 10, symbol: "Ne", name: "নিয়ন", mass: 20.180, group: "noble-gas", 
+              valence: 8, electronConfig: "2p⁶", fullElectronConfig: "1s² 2s² 2p⁶" },
+            { number: 11, symbol: "Na", name: "সোডিয়াম", mass: 22.990, group: "alkali", 
+              valence: 1, electronConfig: "3s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s¹" },
+            { number: 12, symbol: "Mg", name: "ম্যাগনেসিয়াম", mass: 24.305, group: "alkaline", 
+              valence: 2, electronConfig: "3s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s²" },
+            { number: 13, symbol: "Al", name: "অ্যালুমিনিয়াম", mass: 26.982, group: "basic-metal", 
+              valence: 3, electronConfig: "3p¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p¹" },
+            { number: 14, symbol: "Si", name: "সিলিকন", mass: 28.085, group: "semimetal", 
+              valence: 4, electronConfig: "3p²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p²" },
+            { number: 15, symbol: "P", name: "ফসফরাস", mass: 30.974, group: "nonmetal", 
+              valence: 5, electronConfig: "3p³", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p³" },
+            { number: 16, symbol: "S", name: "সালফার", mass: 32.06, group: "nonmetal", 
+              valence: 6, electronConfig: "3p⁴", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁴" },
+            { number: 17, symbol: "Cl", name: "ক্লোরিন", mass: 35.45, group: "halogen", 
+              valence: 7, electronConfig: "3p⁵", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁵" },
+            { number: 18, symbol: "Ar", name: "আর্গন", mass: 39.95, group: "noble-gas", 
+              valence: 8, electronConfig: "3p⁶", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶" },
+            { number: 19, symbol: "K", name: "পটাসিয়াম", mass: 39.098, group: "alkali", 
+              valence: 1, electronConfig: "4s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹" },
+            { number: 20, symbol: "Ca", name: "ক্যালসিয়াম", mass: 40.078, group: "alkaline", 
+              valence: 2, electronConfig: "4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 4s²" },
+            { number: 21, symbol: "Sc", name: "স্ক্যান্ডিয়াম", mass: 44.956, group: "transition", 
+              valence: 3, electronConfig: "3d¹4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹ 4s²" },
+            { number: 22, symbol: "Ti", name: "টাইটানিয়াম", mass: 47.867, group: "transition", 
+              valence: 4, electronConfig: "3d²4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d² 4s²" },
+            { number: 23, symbol: "V", name: "ভ্যানাডিয়াম", mass: 50.942, group: "transition", 
+              valence: 5, electronConfig: "3d³4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p�⑥ 3d³ 4s²" },
+            { number: 24, symbol: "Cr", name: "ক্রোমিয়াম", mass: 51.996, group: "transition", 
+              valence: 6, electronConfig: "3d⁵4s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁵ 4s¹" },
+            { number: 25, symbol: "Mn", name: "ম্যাঙ্গানিজ", mass: 54.938, group: "transition", 
+              valence: 7, electronConfig: "3d⁵4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁵ 4s²" },
+            { number: 26, symbol: "Fe", name: "লোহা", mass: 55.845, group: "transition", 
+              valence: 2, electronConfig: "3d⁶4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁶ 4s²" },
+            { number: 27, symbol: "Co", name: "কোবাল্ট", mass: 58.933, group: "transition", 
+              valence: 2, electronConfig: "3d⁷4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁷ 4s²" },
+            { number: 28, symbol: "Ni", name: "নিকেল", mass: 58.693, group: "transition", 
+              valence: 2, electronConfig: "3d⁸4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁸ 4s²" },
+            { number: 29, symbol: "Cu", name: "তামা", mass: 63.546, group: "transition", 
+              valence: 1, electronConfig: "3d¹⁰4s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s¹" },
+            { number: 30, symbol: "Zn", name: "দস্তা", mass: 65.38, group: "transition", 
+              valence: 2, electronConfig: "3d¹⁰4s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s²" },
+            { number: 31, symbol: "Ga", name: "গ্যালিয়াম", mass: 69.723, group: "basic-metal", 
+              valence: 3, electronConfig: "4p¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p¹" },
+            { number: 32, symbol: "Ge", name: "জার্মেনিয়াম", mass: 72.630, group: "semimetal", 
+              valence: 4, electronConfig: "4p²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p²" },
+            { number: 33, symbol: "As", name: "আর্সেনিক", mass: 74.922, group: "semimetal", 
+              valence: 5, electronConfig: "4p³", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p³" },
+            { number: 34, symbol: "Se", name: "সেলেনিয়াম", mass: 78.971, group: "nonmetal", 
+              valence: 6, electronConfig: "4p⁴", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁴" },
+            { number: 35, symbol: "Br", name: "ব্রোমিন", mass: 79.904, group: "halogen", 
+              valence: 7, electronConfig: "4p⁵", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁵" },
+            { number: 36, symbol: "Kr", name: "ক্রিপ্টন", mass: 83.798, group: "noble-gas", 
+              valence: 8, electronConfig: "4p⁶", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶" },
+            { number: 37, symbol: "Rb", name: "রুবিডিয়াম", mass: 85.468, group: "alkali", 
+              valence: 1, electronConfig: "5s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 5s¹" },
+            { number: 38, symbol: "Sr", name: "স্ট্রনসিয়াম", mass: 87.62, group: "alkaline", 
+              valence: 2, electronConfig: "5s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 5s²" },
+            { number: 39, symbol: "Y", name: "ইট্রিয়াম", mass: 88.906, group: "transition", 
+              valence: 3, electronConfig: "4d¹5s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹ 5s²" },
+            { number: 40, symbol: "Zr", name: "জিরকোনিয়াম", mass: 91.224, group: "transition", 
+              valence: 4, electronConfig: "4d²5s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d² 5s²" },
+            { number: 41, symbol: "Nb", name: "নাইওবিয়াম", mass: 92.906, group: "transition", 
+              valence: 5, electronConfig: "4d⁴5s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d⁴ 5s¹" },
+            { number: 42, symbol: "Mo", name: "মলিবডেনাম", mass: 95.95, group: "transition", 
+              valence: 6, electronConfig: "4d⁵5s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d⁵ 5s¹" },
+            { number: 43, symbol: "Tc", name: "টেকনেটিয়াম", mass: 98, group: "transition", 
+              valence: 7, electronConfig: "4d⁵5s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d⁵ 5s²" },
+            { number: 44, symbol: "Ru", name: "রুথেনিয়াম", mass: 101.07, group: "transition", 
+              valence: 3, electronConfig: "4d⁷5s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d⁷ 5s¹" },
+            { number: 45, symbol: "Rh", name: "রোডিয়াম", mass: 102.91, group: "transition", 
+              valence: 3, electronConfig: "4d⁸5s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d⁸ 5s¹" },
+            { number: 46, symbol: "Pd", name: "প্যালাডিয়াম", mass: 106.42, group: "transition", 
+              valence: 4, electronConfig: "4d¹⁰", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰" },
+            { number: 47, symbol: "Ag", name: "রূপা", mass: 107.87, group: "transition", 
+              valence: 1, electronConfig: "4d¹⁰5s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s¹" },
+            { number: 48, symbol: "Cd", name: "ক্যাডমিয়াম", mass: 112.41, group: "transition", 
+              valence: 2, electronConfig: "4d¹⁰5s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s²" },
+            { number: 49, symbol: "In", name: "ইন্ডিয়াম", mass: 114.82, group: "basic-metal", 
+              valence: 3, electronConfig: "5p¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p¹" },
+            { number: 50, symbol: "Sn", name: "টিন", mass: 118.71, group: "basic-metal", 
+              valence: 4, electronConfig: "5p²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p²" },
+            { number: 51, symbol: "Sb", name: "এন্টিমনি", mass: 121.76, group: "semimetal", 
+              valence: 5, electronConfig: "5p³", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p³" },
+            { number: 52, symbol: "Te", name: "টেলুরিয়াম", mass: 127.60, group: "semimetal", 
+              valence: 6, electronConfig: "5p⁴", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p⁴" },
+            { number: 53, symbol: "I", name: "আয়োডিন", mass: 126.90, group: "halogen", 
+              valence: 7, electronConfig: "5p⁵", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p⁵" },
+            { number: 54, symbol: "Xe", name: "জেনন", mass: 131.29, group: "noble-gas", 
+              valence: 8, electronConfig: "5p⁶", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p⁶" },
+            { number: 55, symbol: "Cs", name: "সিজিয়াম", mass: 132.91, group: "alkali", 
+              valence: 1, electronConfig: "6s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p⁶ 6s¹" },
+            { number: 56, symbol: "Ba", name: "বেরিয়াম", mass: 137.33, group: "alkaline", 
+              valence: 2, electronConfig: "6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p⁶ 6s²" },
+            { number: 57, symbol: "La", name: "ল্যান্থানাম", mass: 138.91, group: "lanthanide", 
+              valence: 3, electronConfig: "5d¹6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4d¹⁰ 5s² 5p⁶ 5d¹ 6s²" },
+            { number: 58, symbol: "Ce", name: "সেরিয়াম", mass: 140.12, group: "lanthanide", 
+              valence: 4, electronConfig: "4f¹5d¹6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹ 5d¹ 6s²" },
+            { number: 59, symbol: "Pr", name: "প্রাসিওডিমিয়াম", mass: 140.91, group: "lanthanide", 
+              valence: 3, electronConfig: "4f³6s²", fullElectronConfig: "1s² 2s² 2p�⑥ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f³ 6s²" },
+            { number: 60, symbol: "Nd", name: "নিওডিমিয়াম", mass: 144.24, group: "lanthanide", 
+              valence: 3, electronConfig: "4f⁴6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f⁴ 6s²" },
+            { number: 61, symbol: "Pm", name: "প্রমিথিয়াম", mass: 145, group: "lanthanide", 
+              valence: 3, electronConfig: "4f⁵6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f⁵ 6s²" },
+            { number: 62, symbol: "Sm", name: "সামারিয়াম", mass: 150.36, group: "lanthanide", 
+              valence: 3, electronConfig: "4f⁶6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f⁶ 6s²" },
+            { number: 63, symbol: "Eu", name: "ইউরোপিয়াম", mass: 151.96, group: "lanthanide", 
+              valence: 3, electronConfig: "4f⁷6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f⁷ 6s²" },
+            { number: 64, symbol: "Gd", name: "গ্যাডোলিনিয়াম", mass: 157.25, group: "lanthanide", 
+              valence: 3, electronConfig: "4f⁷5d¹6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f⁷ 5d¹ 6s²" },
+            { number: 65, symbol: "Tb", name: "টারবিয়াম", mass: 158.93, group: "lanthanide", 
+              valence: 3, electronConfig: "4f⁹6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f⁹ 6s²" },
+            { number: 66, symbol: "Dy", name: "ডিসপ্রোসিয়াম", mass: 162.50, group: "lanthanide", 
+              valence: 3, electronConfig: "4f¹⁰6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 6s²" },
+            { number: 67, symbol: "Ho", name: "হলমিয়াম", mass: 164.93, group: "lanthanide", 
+              valence: 3, electronConfig: "4f¹¹6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹¹ 6s²" },
+            { number: 68, symbol: "Er", name: "এরবিয়াম", mass: 167.26, group: "lanthanide", 
+              valence: 3, electronConfig: "4f¹²6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹² 6s²" },
+            { number: 69, symbol: "Tm", name: "থুলিয়াম", mass: 168.93, group: "lanthanide", 
+              valence: 3, electronConfig: "4f¹³6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹³ 6s²" },
+            { number: 70, symbol: "Yb", name: "ইটারবিয়াম", mass: 173.05, group: "lanthanide", 
+              valence: 3, electronConfig: "4f¹⁴6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 6s²" },
+            { number: 71, symbol: "Lu", name: "লুটেটিয়াম", mass: 174.97, group: "lanthanide", 
+              valence: 3, electronConfig: "4f¹⁴5d¹6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d¹ 6s²" },
+            { number: 72, symbol: "Hf", name: "হাফনিয়াম", mass: 178.49, group: "transition", 
+              valence: 4, electronConfig: "4f¹⁴5d²6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d² 6s²" },
+            { number: 73, symbol: "Ta", name: "ট্যানটালাম", mass: 180.95, group: "transition", 
+              valence: 5, electronConfig: "4f¹⁴5d³6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d³ 6s²" },
+            { number: 74, symbol: "W", name: "টাংস্টেন", mass: 183.84, group: "transition", 
+              valence: 6, electronConfig: "4f¹⁴5d⁴6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d⁴ 6s²" },
+            { number: 75, symbol: "Re", name: "রেনিয়াম", mass: 186.21, group: "transition", 
+              valence: 7, electronConfig: "4f¹⁴5d⁵6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d⁵ 6s²" },
+            { number: 76, symbol: "Os", name: "অসমিয়াম", mass: 190.23, group: "transition", 
+              valence: 8, electronConfig: "4f¹⁴5d⁶6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d⁶ 6s²" },
+            { number: 77, symbol: "Ir", name: "ইরিডিয়াম", mass: 192.22, group: "transition", 
+              valence: 3, electronConfig: "4f¹⁴5d⁷6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d⁷ 6s²" },
+            { number: 78, symbol: "Pt", name: "প্লাটিনাম", mass: 195.08, group: "transition", 
+              valence: 2, electronConfig: "4f¹⁴5d⁹6s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁴ 5d⁹ 6s¹" },
+            { number: 79, symbol: "Au", name: "সোনা", mass: 196.97, group: "transition", 
+              valence: 1, electronConfig: "4f¹⁴5d¹⁰6s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s¹" },
+            { number: 80, symbol: "Hg", name: "পারদ", mass: 200.59, group: "transition", 
+              valence: 2, electronConfig: "4f¹⁴5d¹⁰6s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s²" },
+            { number: 81, symbol: "Tl", name: "থ্যালিয়াম", mass: 204.38, group: "basic-metal", 
+              valence: 3, electronConfig: "6p¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p¹" },
+            { number: 82, symbol: "Pb", name: "সীসা", mass: 207.2, group: "basic-metal", 
+              valence: 4, electronConfig: "6p²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p²" },
+            { number: 83, symbol: "Bi", name: "বিসমাথ", mass: 208.98, group: "basic-metal", 
+              valence: 5, electronConfig: "6p³", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p³" },
+            { number: 84, symbol: "Po", name: "পোলোনিয়াম", mass: 209, group: "semimetal", 
+              valence: 6, electronConfig: "6p⁴", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁴" },
+            { number: 85, symbol: "At", name: "অ্যাস্টাটিন", mass: 210, group: "halogen", 
+              valence: 7, electronConfig: "6p⁵", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁵" },
+            { number: 86, symbol: "Rn", name: "রেডন", mass: 222, group: "noble-gas", 
+              valence: 8, electronConfig: "6p⁶", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶" },
+            { number: 87, symbol: "Fr", name: "ফ্রান্সিয়াম", mass: 223, group: "alkali", 
+              valence: 1, electronConfig: "7s¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 7s¹" },
+            { number: 88, symbol: "Ra", name: "রেডিয়াম", mass: 226, group: "alkaline", 
+              valence: 2, electronConfig: "7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 7s²" },
+            { number: 89, symbol: "Ac", name: "অ্যাক্টিনিয়াম", mass: 227, group: "actinide", 
+              valence: 3, electronConfig: "6d¹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 6d¹ 7s²" },
+            { number: 90, symbol: "Th", name: "থোরিয়াম", mass: 232.04, group: "actinide", 
+              valence: 4, electronConfig: "6d²7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 6d² 7s²" },
+            { number: 91, symbol: "Pa", name: "প্রোটেক্টিনিয়াম", mass: 231.04, group: "actinide", 
+              valence: 5, electronConfig: "5f²6d¹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f² 6d¹ 7s²" },
+            { number: 92, symbol: "U", name: "ইউরেনিয়াম", mass: 238.03, group: "actinide", 
+              valence: 6, electronConfig: "5f³6d¹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f³ 6d¹ 7s²" },
+            { number: 93, symbol: "Np", name: "নেপচুনিয়াম", mass: 237, group: "actinide", 
+              valence: 7, electronConfig: "5f⁴6d¹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f⁴ 6d¹ 7s²" },
+            { number: 94, symbol: "Pu", name: "প্লুটোনিয়াম", mass: 244, group: "actinide", 
+              valence: 7, electronConfig: "5f⁶7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f⁶ 7s²" },
+            { number: 95, symbol: "Am", name: "আমেরিসিয়াম", mass: 243, group: "actinide", 
+              valence: 7, electronConfig: "5f⁷7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f⁷ 7s²" },
+            { number: 96, symbol: "Cm", name: "কিউরিয়াম", mass: 247, group: "actinide", 
+              valence: 7, electronConfig: "5f⁷6d¹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f⁷ 6d¹ 7s²" },
+            { number: 97, symbol: "Bk", name: "বার্কেলিয়াম", mass: 247, group: "actinide", 
+              valence: 7, electronConfig: "5f⁹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f⁹ 7s²" },
+            { number: 98, symbol: "Cf", name: "ক্যালিফোর্নিয়াম", mass: 251, group: "actinide", 
+              valence: 7, electronConfig: "5f¹⁰7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 7s²" },
+            { number: 99, symbol: "Es", name: "আইনস্টাইনিয়াম", mass: 252, group: "actinide", 
+              valence: 7, electronConfig: "5f¹¹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹¹ 7s²" },
+            { number: 100, symbol: "Fm", name: "ফার্মিয়াম", mass: 257, group: "actinide", 
+              valence: 7, electronConfig: "5f¹²7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹² 7s²" },
+            { number: 101, symbol: "Md", name: "মেন্ডেলিভিয়াম", mass: 258, group: "actinide", 
+              valence: 7, electronConfig: "5f¹³7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹³ 7s²" },
+            { number: 102, symbol: "No", name: "নোবেলিয়াম", mass: 259, group: "actinide", 
+              valence: 7, electronConfig: "5f¹⁴7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 7s²" },
+            { number: 103, symbol: "Lr", name: "লরেনসিয়াম", mass: 266, group: "actinide", 
+              valence: 3, electronConfig: "5f¹⁴7s²7p¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 7s² 7p¹" },
+            { number: 104, symbol: "Rf", name: "রাদারফোর্ডিয়াম", mass: 267, group: "transition", 
+              valence: 4, electronConfig: "6d²7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d² 7s²" },
+            { number: 105, symbol: "Db", name: "ডুবনিয়াম", mass: 268, group: "transition", 
+              valence: 5, electronConfig: "6d³7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d³ 7s²" },
+            { number: 106, symbol: "Sg", name: "সিবোর্গিয়াম", mass: 269, group: "transition", 
+              valence: 6, electronConfig: "6d⁴7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d⁴ 7s²" },
+            { number: 107, symbol: "Bh", name: "বোহরিয়াম", mass: 270, group: "transition", 
+              valence: 7, electronConfig: "6d⁵7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d⁵ 7s²" },
+            { number: 108, symbol: "Hs", name: "হ্যাসিয়াম", mass: 277, group: "transition", 
+              valence: 8, electronConfig: "6d⁶7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p�⑥ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d⁶ 7s²" },
+            { number: 109, symbol: "Mt", name: "মাইটনেরিয়াম", mass: 278, group: "transition", 
+              valence: 9, electronConfig: "6d⁷7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d⁷ 7s²" },
+            { number: 110, symbol: "Ds", name: "ডার্মস্টাডটিয়াম", mass: 281, group: "transition", 
+              valence: 10, electronConfig: "6d⁸7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d⁸ 7s²" },
+            { number: 111, symbol: "Rg", name: "রন্টজেনিয়াম", mass: 282, group: "transition", 
+              valence: 11, electronConfig: "6d⁹7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d⁹ 7s²" },
+            { number: 112, symbol: "Cn", name: "কোপারনিসিয়াম", mass: 285, group: "transition", 
+              valence: 12, electronConfig: "6d¹⁰7s²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s²" },
+            { number: 113, symbol: "Nh", name: "নিহোনিয়াম", mass: 286, group: "basic-metal", 
+              valence: 3, electronConfig: "7s²7p¹", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s² 7p¹" },
+            { number: 114, symbol: "Fl", name: "ফ্লেরোভিয়াম", mass: 289, group: "basic-metal", 
+              valence: 4, electronConfig: "7s²7p²", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s² 7p²" },
+            { number: 115, symbol: "Mc", name: "মস্কোভিয়াম", mass: 290, group: "basic-metal", 
+              valence: 5, electronConfig: "7s²7p³", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s² 7p³" },
+            { number: 116, symbol: "Lv", name: "লিভারমোরিয়াম", mass: 293, group: "basic-metal", 
+              valence: 6, electronConfig: "7s²7p⁴", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s² 7p⁴" },
+            { number: 117, symbol: "Ts", name: "টেনেসিন", mass: 294, group: "halogen", 
+              valence: 7, electronConfig: "7s²7p⁵", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s² 7p⁵" },
+            { number: 118, symbol: "Og", name: "ওগানেসন", mass: 294, group: "noble-gas", 
+              valence: 8, electronConfig: "7s²7p⁶", fullElectronConfig: "1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p⁶ 4f¹⁰ 5d¹⁰ 6s² 6p⁶ 5f¹⁰ 6d¹⁰ 7s² 7p⁶" }
+        ];
+
+        // গ্রুপের নাম ম্যাপিং
+        const groupNames = {
+            "alkali": "ক্ষার ধাতু",
+            "alkaline": "ক্ষারকীয় মৃত্তিকা ধাতু",
+            "transition": "সংক্রমণ ধাতু",
+            "basic-metal": "মৌলিক ধাতু",
+            "semimetal": "ধাতুকল্প",
+            "nonmetal": "অধাতু",
+            "halogen": "হ্যালোজেন",
+            "noble-gas": "নোবেল গ্যাস",
+            "lanthanide": "ল্যান্থানাইড",
+            "actinide": "অ্যাক্টিনাইড"
+        };
+
+        // এলিমেন্ট কার্ড তৈরি করার ফাংশন
+        function renderElements(filterGroup = "all") {
+            const container = document.querySelector('.elements-grid');
+            container.innerHTML = '';
+            
+            // গ্রুপ অনুযায়ী এলিমেন্ট ফিল্টার করুন
+            const filteredElements = filterGroup === "all" 
+                ? elements 
+                : elements.filter(el => el.group === filterGroup);
+            
+            // এলিমেন্ট কার্ড তৈরি করুন
+            filteredElements.forEach(element => {
+                const card = document.createElement('div');
+                card.className = `element-card ${element.group}`;
+                card.innerHTML = `
+                    <div class="element-number">${element.number}</div>
+                    <div class="element-symbol">${element.symbol}</div>
+                    <div class="element-name">${element.name}</div>
+                    <div class="element-mass">${element.mass} g/mol</div>
+                    <div class="element-group">${groupNames[element.group]}</div>
+                `;
+                
+                // কার্ডে ক্লিক ইভেন্ট যোগ করুন
+                card.addEventListener('click', () => {
+                    showElementDetails(element);
+                });
+                
+                container.appendChild(card);
+            });
+            
+            // যদি কোন এলিমেন্ট না থাকে
+            if (filteredElements.length === 0) {
+                container.innerHTML = '<div class="no-results">এই গ্রুপে কোন মৌল পাওয়া যায়নি</div>';
+            }
+        }
+
+        // মোডাল পপআপে মৌলের বিস্তারিত তথ্য দেখান
+        function showElementDetails(element) {
+            document.getElementById('modalSymbol').textContent = element.symbol;
+            document.getElementById('modalName').textContent = element.name;
+            document.getElementById('modalNumber').textContent = `পারমাণবিক সংখ্যা: ${element.number}`;
+            document.getElementById('modalAtomicNumber').textContent = element.number;
+            document.getElementById('modalAtomicMass').textContent = `${element.mass} g/mol`;
+            document.getElementById('modalValence').textContent = element.valence;
+            document.getElementById('modalElectronConfig').textContent = element.electronConfig;
+            document.getElementById('modalFullElectronConfig').textContent = element.fullElectronConfig;
+            
+            // মোডাল প্রদর্শন করুন
+            document.getElementById('elementModal').style.display = 'flex';
+        }
+
+        // সার্চ ফাংশন
+        function setupSearch() {
+            const searchBox = document.querySelector('.search-box');
+            searchBox.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const container = document.querySelector('.elements-grid');
+                container.innerHTML = '';
+                
+                const filteredElements = elements.filter(el => 
+                    el.name.toLowerCase().includes(searchTerm) || 
+                    el.symbol.toLowerCase().includes(searchTerm) || 
+                    el.number.toString().includes(searchTerm)
+                );
+                
+                if (filteredElements.length > 0) {
+                    filteredElements.forEach(element => {
+                        const card = document.createElement('div');
+                        card.className = `element-card ${element.group}`;
+                        card.innerHTML = `
+                            <div class="element-number">${element.number}</div>
+                            <div class="element-symbol">${element.symbol}</div>
+                            <div class="element-name">${element.name}</div>
+                            <div class="element-mass">${element.mass} g/mol</div>
+                            <div class="element-group">${groupNames[element.group]}</div>
+                        `;
+                        
+                        // কার্ডে ক্লিক ইভেন্ট যোগ করুন
+                        card.addEventListener('click', () => {
+                            showElementDetails(element);
+                        });
+                        
+                        container.appendChild(card);
+                    });
+                } else {
+                    container.innerHTML = '<div class="no-results">কোন মৌল পাওয়া যায়নি</div>';
+                }
+            });
+        }
+
+        // গ্রুপ বাটন সেটআপ
+        function setupGroupButtons() {
+            const groupButtons = document.querySelectorAll('.group-btn');
+            groupButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // সক্রিয় ক্লাস টগল করুন
+                    groupButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // নির্বাচিত গ্রুপ দ্বারা ফিল্টার করুন
+                    const selectedGroup = button.getAttribute('data-group');
+                    renderElements(selectedGroup);
+                });
+            });
+        }
+
+        // মোডাল বন্ধ করার ফাংশন
+        function setupModalClose() {
+            const modal = document.getElementById('elementModal');
+            const closeBtn = document.getElementById('closeModal');
+            
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // পৃষ্ঠা লোড হওয়ার পর ইভেন্ট লিসেনার সেটআপ করুন
+        document.addEventListener('DOMContentLoaded', () => {
+            renderElements();
+            setupSearch();
+            setupGroupButtons();
+            setupModalClose();
+        });
+    </script>      
+</body>
+</html>
